@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <h1>Parada de Maquina</h1>
+    </header>
+    <main>
+        <div class="infos">
+            <label>Nome:
+                <input type="text" id="operator" placeholder="9999 - Seu Nome">
+            </label>
+            <label>Equipamento:
+                <input type="text" id="equipamento" placeholder="Celula 13">
+            </label>
+        </div>
+        <button>Iniciar</button>
+
+        <section class="stop-register">
+            <div>
+                <h4>Inicio da Parada:</h4>
+                <p id="startHour">13:00</p>
+                <p id="startDate">- 26/02/25</p>
+            </div>
+            <div>
+                <h4>Fim da Parada:</h4>
+                <p id="endHour">19:00</p>
+                <p id="endDate">- 26/02/25</p>
+            </div>
+            <div>
+                <h4>Tempo Total:</h4>
+                <p id="stopTime">06:00</p>
+            </div>
+
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>

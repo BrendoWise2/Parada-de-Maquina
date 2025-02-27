@@ -1,0 +1,43 @@
+* {
+    margin: auto;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header h1 {
+    padding: 30px;
+}
+
+main {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.infos label {
+    margin-left: 40px;
+}
+
+main button {
+    margin-top: 30px;
+}
+
+.stop-register {
+    margin-top: 30px;
+}
+
+.stop-register div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.stop-register p {
+    margin-left: 5px;
+}
