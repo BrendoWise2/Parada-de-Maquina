@@ -1,36 +1,75 @@
-let startStop = null;
-let intervalTime;
+let startTime = null;
+let intervalTimer;
+const btnStart = document.querySelector('#startButton');
+const btnStop = document.querySelector('#stopButton');
 
 document.addEventListener('DOMContentLoaded', () => {
-    const bntStart = document.querySelector('button');
-    bntStart.addEventListener('click', startStopAction);
+
+    btnStart.addEventListener('click', startMachineStop);
+    btnStop.addEventListener('click', endMachineStop);
 });
 
-function startStopAction() {
-    const operator = document.getElementById('operator').value;
-    const equipamento = document.getElementById('equipamento').value;
+function startMachineStop() {
+    const operatorName = document.getElementById('operator').value;
+    const machineName = document.getElementById('equipamento').value;
 
-    if (!operator && !equipamento) {
+    if (!operatorName || !machineName) {
         alert('Preencha todos os campos!');
         return;
     }
 
-    startStop = new Date();
-    document.getElementById('startHour').textContent = startStop.toLocaleTimeString();
-    document.getElementById('startDate').textContent = "-" + startStop.toLocaleDateString();
+    startTime = new Date();
+    document.getElementById('startHour').textContent = startTime.toLocaleTimeString();
+    document.getElementById('startDate').textContent = "-" + startTime.toLocaleDateString();
 
-    intervalTime = setInterval(updateTime, 1000);
+    intervalTimer = setInterval(updateElapsedTime, 1000);
 
     fetch("http://localhost:8080/parada/iniciar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ operator, equipamento, start: startStop })
-    }).catch(error => console.error("Erro ao registrar inicio:", error));
+        body: JSON.stringify({ operator: operatorName, equipamento: machineName, start: startTime })
+    }).catch(error => console.error("Erro ao registrar início:", error));
+
+    btnStart.style.display = "none"
 }
 
-function stopAction() {
-    if (!startStop) {
-        alert('Nenhuma parada foi iniciada!')
+function updateElapsedTime() {
+    if (!startTime) return;
+
+    const currentTime = new Date();
+    const elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
+
+    const hours = String(Math.floor(elapsedTimeInSeconds / 3600)).padStart(2, "0");
+    const minutes = String(Math.floor((elapsedTimeInSeconds % 3600) / 60)).padStart(2, "0");
+    const seconds = String(elapsedTimeInSeconds % 60).padStart(2, "0");
+
+    document.getElementById("stopTime").textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+function endMachineStop() {
+    if (!startTime) {
+        alert('Nenhuma parada foi iniciada!');
         return;
     }
+
+    const endTime = new Date();
+    document.getElementById('endHour').textContent = endTime.toLocaleTimeString();
+    document.getElementById('endDate').textContent = endTime.toLocaleDateString();
+
+    clearInterval(intervalTimer);
+
+    const elapsedTimeInSeconds = (endTime - startTime) / 1000;
+    const hours = String(Math.floor(elapsedTimeInSeconds / 3600)).padStart(2, "0");
+    const minutes = String(Math.floor((elapsedTimeInSeconds % 3600) / 60)).padStart(2, "0");
+    const seconds = String(Math.floor(elapsedTimeInSeconds % 60)).padStart(2, "0");
+
+    document.getElementById("stopTime").textContent = `${hours}:${minutes}:${seconds}`;
+
+    fetch("http://localhost:8080/parada/stop", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ operator: operatorName, equipamento: machineName, end: endTime })
+    }).catch(error => console.error("Erro ao registrar fim:", error));
+
+    startTime = null;
 }
