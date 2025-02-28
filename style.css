@@ -28,6 +28,10 @@ main button {
     margin-top: 30px;
 }
 
+#startButton {
+    display: flex;
+}
+
 .stop-register {
     margin-top: 30px;
 }
