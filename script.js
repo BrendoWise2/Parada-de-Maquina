@@ -3,24 +3,27 @@ let intervalTimer;
 const btnStart = document.querySelector('#startButton');
 const btnStop = document.querySelector('#stopButton');
 
-document.addEventListener('DOMContentLoaded', () => {
+btnStop.disabled = true;  // Make sure the stop button is disabled initially
 
+let operatorName, machineName; // Declare globally
+
+document.addEventListener('DOMContentLoaded', () => {
     btnStart.addEventListener('click', startMachineStop);
     btnStop.addEventListener('click', endMachineStop);
 });
 
 function startMachineStop() {
-    const operatorName = document.getElementById('operator').value;
-    const machineName = document.getElementById('equipamento').value;
+    operatorName = document.getElementById('operator').value;
+    machineName = document.getElementById('equipamento').value;
 
     if (!operatorName || !machineName) {
-        alert('Preencha todos os campos!');
+        alert('Por favor, preencha todos os campos!');
         return;
     }
 
     startTime = new Date();
     document.getElementById('startHour').textContent = startTime.toLocaleTimeString();
-    document.getElementById('startDate').textContent = "-" + startTime.toLocaleDateString();
+    document.getElementById('startDate').textContent = startTime.toLocaleDateString();
 
     intervalTimer = setInterval(updateElapsedTime, 1000);
 
@@ -30,7 +33,8 @@ function startMachineStop() {
         body: JSON.stringify({ operator: operatorName, equipamento: machineName, start: startTime })
     }).catch(error => console.error("Erro ao registrar início:", error));
 
-    btnStart.style.display = "none"
+    btnStart.disabled = true;
+    btnStop.disabled = false;  // Enable the stop button once started
 }
 
 function updateElapsedTime() {
@@ -47,6 +51,7 @@ function updateElapsedTime() {
 }
 
 function endMachineStop() {
+
     if (!startTime) {
         alert('Nenhuma parada foi iniciada!');
         return;
@@ -65,11 +70,21 @@ function endMachineStop() {
 
     document.getElementById("stopTime").textContent = `${hours}:${minutes}:${seconds}`;
 
+    // Format the endTime to a string in a standard format (e.g., 'yyyy-mm-ddTHH:mm:ss')
+    const formattedEndTime = endTime.toISOString();
+
     fetch("http://localhost:8080/parada/stop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ operator: operatorName, equipamento: machineName, end: endTime })
+        body: JSON.stringify({
+            operator: operatorName,
+            equipamento: machineName,
+            end: formattedEndTime // Use formattedEndTime here
+        })
     }).catch(error => console.error("Erro ao registrar fim:", error));
 
     startTime = null;
+
+    btnStart.disabled = false;
+    btnStop.disabled = true;
 }
