@@ -3,8 +3,6 @@ let intervalTimer;
 const btnStart = document.querySelector('#startButton');
 const btnStop = document.querySelector('#stopButton');
 
-btnStop.disabled = true;  // Make sure the stop button is disabled initially
-
 let operatorName, machineName; // Declare globally
 
 document.addEventListener('DOMContentLoaded', () => {
