@@ -72,6 +72,8 @@ function endMachineStop() {
 
     // Format the endTime to a string in a standard format (e.g., 'yyyy-mm-ddTHH:mm:ss')
     const formattedEndTime = endTime.toISOString();
+    btnStart.disabled = false;
+    btnStop.disabled = true;
 
     fetch("http://localhost:8080/parada/stop", {
         method: "POST",
@@ -85,6 +87,5 @@ function endMachineStop() {
 
     startTime = null;
 
-    btnStart.disabled = false;
-    btnStop.disabled = true;
+
 }
